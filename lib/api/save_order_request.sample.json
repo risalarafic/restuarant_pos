@@ -1,0 +1,82 @@
+{
+  "method": "POST",
+  "path": "/api/orders",
+  "walkin": {
+    "customer_type": "WALKIN",
+    "credit_customer_id": null,
+    "walkin_phone": "98470112",
+    "delivery_team_id": null,
+    "items": [
+      {
+        "product_id": "p1",
+        "title": "Veg Spring Roll",
+        "price": 80.0,
+        "quantity": 2,
+        "amount": 160.0,
+        "note": "Extra spicy",
+        "is_veg": true
+      },
+      {
+        "product_id": "p3",
+        "title": "Margherita Pizza",
+        "price": 250.0,
+        "quantity": 1,
+        "amount": 250.0,
+        "note": null,
+        "is_veg": true
+      }
+    ],
+    "item_count": 3,
+    "sub_total": 410.0,
+    "total": 410.0
+  },
+  "credit": {
+    "customer_type": "CREDIT",
+    "credit_customer_id": "c1",
+    "walkin_phone": null,
+    "delivery_team_id": null,
+    "items": [
+      {
+        "product_id": "p2",
+        "title": "Chicken Tikka",
+        "price": 220.0,
+        "quantity": 1,
+        "amount": 220.0,
+        "note": "No onion",
+        "is_veg": false
+      }
+    ],
+    "item_count": 1,
+    "sub_total": 220.0,
+    "total": 220.0
+  },
+  "delivery": {
+    "customer_type": "DELIVERY",
+    "credit_customer_id": null,
+    "walkin_phone": null,
+    "delivery_team_id": "d1",
+    "items": [
+      {
+        "product_id": "p4",
+        "title": "Veg Burger",
+        "price": 120.0,
+        "quantity": 3,
+        "amount": 360.0,
+        "note": null,
+        "is_veg": true
+      }
+    ],
+    "item_count": 3,
+    "sub_total": 360.0,
+    "total": 360.0
+  },
+  "response_body": {
+    "success": true,
+    "message": "Order saved",
+    "data": {
+      "order_id": "ord_84",
+      "order_number": 84,
+      "status": "submitted"
+    }
+  }
+}

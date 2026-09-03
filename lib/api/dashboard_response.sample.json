@@ -1,0 +1,81 @@
+{
+  "success": true,
+  "message": "Dashboard loaded",
+  "data": {
+    "restaurant": {
+      "id": "r1",
+      "name": "Kudeghor POS"
+    },
+    "categories": [
+      { "id": "cat_starters", "name": "Starters" },
+      { "id": "cat_pizza", "name": "Pizza" },
+      { "id": "cat_burger", "name": "Burger" },
+      { "id": "cat_sandwich", "name": "Sandwich" },
+      { "id": "cat_pasta", "name": "Pasta" },
+      { "id": "cat_hot_beverages", "name": "Hot Beverages" },
+      { "id": "cat_cold_beverages", "name": "Cold Beverages" }
+    ],
+    "products": [
+      {
+        "id": "p1",
+        "category_id": "cat_starters",
+        "title": "Veg Spring Roll",
+        "price": 80.0,
+        "image": "https://example.com/images/veg-spring-roll.jpg",
+        "is_veg": true
+      },
+      {
+        "id": "p2",
+        "category_id": "cat_starters",
+        "title": "Chicken Tikka",
+        "price": 220.0,
+        "image": "https://example.com/images/chicken-tikka.jpg",
+        "is_veg": false
+      },
+      {
+        "id": "p3",
+        "category_id": "cat_pizza",
+        "title": "Margherita Pizza",
+        "price": 250.0,
+        "image": "https://example.com/images/margherita-pizza.jpg",
+        "is_veg": true
+      },
+      {
+        "id": "p4",
+        "category_id": "cat_burger",
+        "title": "Veg Burger",
+        "price": 120.0,
+        "image": "https://example.com/images/veg-burger.jpg",
+        "is_veg": true
+      }
+    ],
+    "credit_customers": [
+      {
+        "id": "c1",
+        "name": "Risala KM",
+        "phone": "98470112"
+      },
+      {
+        "id": "c2",
+        "name": "Abdul Murad",
+        "phone": "98601445"
+      },
+      {
+        "id": "c3",
+        "name": "Nafees",
+        "phone": "98712778"
+      },
+      {
+        "id": "c4",
+        "name": "Hosne Mubarak",
+        "phone": "98823990"
+      }
+    ],
+    "delivery_teams": [
+      { "id": "d1", "name": "Rafeek" },
+      { "id": "d2", "name": "Keeta" },
+      { "id": "d3", "name": "Snoonu" },
+      { "id": "d4", "name": "Talabat" }
+    ]
+  }
+}
