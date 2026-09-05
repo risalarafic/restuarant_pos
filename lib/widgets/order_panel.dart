@@ -27,9 +27,10 @@ class OrderPanel extends StatelessWidget {
     required this.onRemove,
     required this.onAddNote,
     required this.onSubmit,
+    this.isSubmitting = false,
   });
 
-  final int orderNumber;
+  final String orderNumber;
   final String customerType;
   final List<CartItem> cart;
   final List<CreditCustomer> creditCustomers;
@@ -45,6 +46,7 @@ class OrderPanel extends StatelessWidget {
   final ValueChanged<CartItem> onRemove;
   final ValueChanged<CartItem> onAddNote;
   final VoidCallback onSubmit;
+  final bool isSubmitting;
 
   static const customerTypes = [
     'Credit Customer',
@@ -352,7 +354,7 @@ class OrderPanel extends StatelessWidget {
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
-                onPressed: onSubmit,
+                onPressed: isSubmitting ? null : onSubmit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
@@ -361,13 +363,22 @@ class OrderPanel extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text(
-                  'Submit',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                child: isSubmitting
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
               ),
             ),
           ),

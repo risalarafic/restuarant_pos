@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../api/auth_api.dart';
+import '../api/login_response.dart';
+import '../auth/auth_session.dart';
 import '../auth/demo_auth.dart';
 import '../theme/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, required this.onLoginSuccess});
+  const LoginScreen({
+    super.key,
+    required this.authApi,
+    required this.onLoginSuccess,
+  });
 
-  final VoidCallback onLoginSuccess;
+  final AuthApi authApi;
+  final ValueChanged<AuthSession> onLoginSuccess;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -49,25 +57,46 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     setState(() => _isSubmitting = true);
-    await Future<void>.delayed(const Duration(milliseconds: 600));
-    if (!mounted) return;
 
     final email = _emailController.text;
     final password = _passwordController.text;
-    if (!DemoAuth.matches(email, password)) {
-      setState(() {
-        _isSubmitting = false;
-        _authError = 'Invalid email or password';
-      });
-      return;
-    }
 
-    widget.onLoginSuccess();
-    await DemoAuth.saveRemembered(
-      remember: _rememberMe,
-      email: email,
-      password: password,
-    );
+    try {
+      final result = await widget.authApi.login(
+        username: email,
+        password: password,
+      );
+      // Attach email & password to user so DashboardApi can reuse them
+      final rawUser = result.user!;
+      final userWithCreds = LoginUserDetails(
+        id: rawUser.id,
+        name: rawUser.name,
+        restaurantId: rawUser.restaurantId,
+        restaurantName: rawUser.restaurantName,
+        email: email.trim(),
+        password: password,
+      );
+      final session = AuthSession(
+        authToken: result.authToken!,
+        user: userWithCreds,
+      );
+      await AuthStorage.saveSession(session);
+      await DemoAuth.saveRemembered(
+        remember: _rememberMe,
+        email: email,
+        password: password,
+      );
+      if (!mounted) return;
+      widget.onLoginSuccess(session);
+    } on AuthException catch (error) {
+      if (!mounted) return;
+      setState(() => _authError = error.message);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _authError = 'Unable to sign in. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   @override

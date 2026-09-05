@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'api/auth_api.dart';
+import 'auth/auth_session.dart';
 import 'screens/login_screen.dart';
 import 'screens/pos_dashboard.dart';
 import 'theme/app_colors.dart';
@@ -10,14 +12,49 @@ void main() {
 }
 
 class RestaurantPosApp extends StatefulWidget {
-  const RestaurantPosApp({super.key});
+  const RestaurantPosApp({
+    super.key,
+    this.authApi,
+    this.restoreSession = true,
+  });
+
+  final AuthApi? authApi;
+  final bool restoreSession;
 
   @override
   State<RestaurantPosApp> createState() => _RestaurantPosAppState();
 }
 
 class _RestaurantPosAppState extends State<RestaurantPosApp> {
-  bool _isLoggedIn = false;
+  late final AuthApi _authApi;
+  AuthSession? _session;
+  bool _ready = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _authApi = widget.authApi ?? RemoteAuthApi();
+    if (widget.restoreSession) {
+      _restoreSession();
+    } else {
+      _ready = true;
+    }
+  }
+
+  Future<void> _restoreSession() async {
+    final session = await AuthStorage.loadSession();
+    if (!mounted) return;
+    setState(() {
+      _session = session;
+      _ready = true;
+    });
+  }
+
+  Future<void> _logout() async {
+    await AuthStorage.clearSession();
+    if (!mounted) return;
+    setState(() => _session = null);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +77,19 @@ class _RestaurantPosAppState extends State<RestaurantPosApp> {
           ),
         ),
       ),
-      home: _isLoggedIn
-          ? PosDashboard(
-              onLogout: () => setState(() => _isLoggedIn = false),
+      home: !_ready
+          ? const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
             )
-          : LoginScreen(
-              onLoginSuccess: () => setState(() => _isLoggedIn = true),
-            ),
+          : _session != null
+              ? PosDashboard(
+                  session: _session!,
+                  onLogout: _logout,
+                )
+              : LoginScreen(
+                  authApi: _authApi,
+                  onLoginSuccess: (session) => setState(() => _session = session),
+                ),
     );
   }
 }

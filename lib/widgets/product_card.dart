@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/product.dart';
 import '../theme/app_colors.dart';
+import 'remote_image.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -40,31 +41,16 @@ class ProductCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.network(
-                      product.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Container(
-                        color: const Color(0xFFFFE8DE),
-                        child: const Icon(
-                          Icons.fastfood_rounded,
-                          color: AppColors.primary,
-                          size: 42,
-                        ),
-                      ),
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return Container(
-                          color: const Color(0xFFF3F4F6),
-                          child: const Center(
-                            child: SizedBox(
-                              width: 22,
-                              height: 22,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                    product.imageUrl.isEmpty
+                        ? Container(
+                            color: const Color(0xFFFFE8DE),
+                            child: const Icon(
+                              Icons.fastfood_rounded,
+                              color: AppColors.primary,
+                              size: 42,
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          )
+                        : RemoteImage(url: product.imageUrl),
                     Positioned(
                       top: 8,
                       right: 8,

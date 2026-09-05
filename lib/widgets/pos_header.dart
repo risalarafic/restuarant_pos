@@ -5,9 +5,11 @@ import '../theme/app_colors.dart';
 class PosHeader extends StatelessWidget {
   const PosHeader({
     super.key,
+    required this.restaurantName,
     required this.onLogout,
   });
 
+  final String restaurantName;
   final VoidCallback onLogout;
 
   @override
@@ -40,15 +42,18 @@ class PosHeader extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              const Text(
-                'Kudeghor POS',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+              Expanded(
+                child: Text(
+                  restaurantName.isEmpty ? 'POS' : restaurantName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-              const Spacer(),
               PopupMenuButton<String>(
                 tooltip: 'Account',
                 onSelected: (value) {

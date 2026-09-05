@@ -5,12 +5,20 @@ class Product {
     required this.price,
     required this.category,
     required this.imageUrl,
+    this.itemCode = '',
+    this.costPrice = 0,
+    this.unit = 'PCS',
+    this.categoryId = '',
     this.isVeg = true,
   });
 
   final String id;
+  final String itemCode;
   final String name;
   final double price;
+  final double costPrice;
+  final String unit;
+  final String categoryId;
   final String category;
   final String imageUrl;
   final bool isVeg;
